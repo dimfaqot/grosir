@@ -117,4 +117,32 @@ class Transaksi extends BaseController
 
         sukses_js("Ok", $data);
     }
+
+    public function list()
+    {
+        $tahun = clear($this->request->getVar('tahun'));
+        $bulan = clear($this->request->getVar('bulan'));
+        $jenis = clear($this->request->getVar('jenis'));
+
+        // Query total biaya
+        $total = db(strtolower($jenis))
+            ->selectSum('biaya')
+            ->where("MONTH(FROM_UNIXTIME(tgl))", $bulan)
+            ->where("YEAR(FROM_UNIXTIME(tgl))", $tahun)
+            ->get()
+            ->getRowArray();
+
+
+        // Query data detail
+        $data = db(strtolower($jenis))
+            ->select('*')
+            ->where("MONTH(FROM_UNIXTIME(tgl))", $bulan)
+            ->where("YEAR(FROM_UNIXTIME(tgl))", $tahun)
+            ->orderBy('tgl', 'DESC')
+            ->get()
+            ->getResultArray();
+
+
+        sukses_js("Ok", $data, $total['biaya']);
+    }
 }

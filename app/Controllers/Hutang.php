@@ -38,6 +38,7 @@ class Hutang extends BaseController
         $customer_id = clear($this->request->getVar('customer_id'));
         $customer = db('customer')->where('id', $customer_id)->get()->getRowArray();
 
+
         if (!$customer) {
             gagal_js("Customer not found");
         }

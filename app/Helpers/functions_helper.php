@@ -234,3 +234,74 @@ function toko()
 {
     return db('toko')->orderBy('toko', 'ASC')->get()->getResultArray();
 }
+
+function tahuns($tabel)
+{
+    $db = db($tabel);
+    $db->select("YEAR(FROM_UNIXTIME(tgl)) AS tahun");
+    $db->groupBy("tahun");
+    $db->orderBy("tahun", "ASC");
+
+    $query = $db->get();
+    $results = $query->getResultArray();
+    return $results;
+}
+
+function bulans($req = null)
+{
+    $bulan = [
+        ['romawi' => 'I', 'bulan' => 'Januari', 'angka' => '01', 'satuan' => 1],
+        ['romawi' => 'II', 'bulan' => 'Februari', 'angka' => '02', 'satuan' => 2],
+        ['romawi' => 'III', 'bulan' => 'Maret', 'angka' => '03', 'satuan' => 3],
+        ['romawi' => 'IV', 'bulan' => 'April', 'angka' => '04', 'satuan' => 4],
+        ['romawi' => 'V', 'bulan' => 'Mei', 'angka' => '05', 'satuan' => 5],
+        ['romawi' => 'VI', 'bulan' => 'Juni', 'angka' => '06', 'satuan' => 6],
+        ['romawi' => 'VII', 'bulan' => 'Juli', 'angka' => '07', 'satuan' => 7],
+        ['romawi' => 'VIII', 'bulan' => 'Agustus', 'angka' => '08', 'satuan' => 8],
+        ['romawi' => 'IX', 'bulan' => 'September', 'angka' => '09', 'satuan' => 9],
+        ['romawi' => 'X', 'bulan' => 'Oktober', 'angka' => '10', 'satuan' => 10],
+        ['romawi' => 'XI', 'bulan' => 'November', 'angka' => '11', 'satuan' => 11],
+        ['romawi' => 'XII', 'bulan' => 'Desember', 'angka' => '12', 'satuan' => 12]
+    ];
+
+    $res = $bulan;
+    foreach ($bulan as $i) {
+        if ($i['bulan'] == $req) {
+            $res = $i;
+        } elseif ($i['angka'] == $req) {
+            $res = $i;
+        } elseif ($i['satuan'] == $req) {
+            $res = $i;
+        } elseif ($i['romawi'] == $req) {
+            $res = $i;
+        }
+    }
+    return $res;
+}
+
+function profile()
+{
+    return db('profile')->get()->getRowArray();
+}
+
+function uang_modal()
+{
+    // Query total biaya
+    $total = db('pengeluaran')
+        ->selectSum('biaya')
+        ->where('jenis', "Modal")
+        ->get()
+        ->getRowArray();
+
+    // Query data detail
+    $data = db('pengeluaran')
+        ->select('*')
+        ->where('jenis', "Modal")
+        ->orderBy('tgl', 'DESC')
+        ->get()
+        ->getResultArray();
+
+    $res = ['total' => $total['biaya'], 'data' => $data];
+
+    return $res;
+}

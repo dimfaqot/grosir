@@ -4,7 +4,7 @@
 
 <p class="text-center bg-secondary mt-2 p-4 fw-bold" style="font-size: 40px;margin-top:190px;">
     <img src="<?= base_url('logo.png'); ?>" width="80" alt="LOGO">
-    -[<span class="bg-dark pb-1">GROSIR</span>]-
+    -[<span class="bg-dark pb-1"><?= strtoupper(profile()['nama']); ?></span>]-
 </p>
 
 <form method="post" action="<?= base_url('guest/login'); ?>">

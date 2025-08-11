@@ -1,7 +1,21 @@
 <?= $this->extend('templates/logged') ?>
 
 <?= $this->section('content') ?>
+<div class="d-flex mb-3">
+    <div class="p-2 flex-fill">
+        <div class="text-warning text-center">
+            <div class="mb-1">TOTAL</div>
+            <input type="text" value="<?= angka($total); ?>" class="form-control super_total bg-warning fw-bold text-center text-dark border border-light border-3">
+        </div>
+    </div>
 
+    <div class="p-2 flex-fill">
+        <div class="mb-1 text-center">PENELUARAN</div>
+        <div class="d-grid">
+            <button class="btn btn-light lists"><i class="fa-solid fa-list"></i></button>
+        </div>
+    </div>
+</div>
 <div class="input-group input-group-sm mb-2">
     <input type="text" class="form-control bg-dark text-light border-secondary cari_card" placeholder="Cari..." aria-label="Recipient's username" aria-describedby="button-addon2">
     <button class="btn btn-outline-light form_input" data-order="Add" type="button"><i class="fa-solid fa-circle-plus"></i> <?= menu()['menu']; ?></button>
@@ -218,6 +232,104 @@
     $(document).on('keyup', '.cari_biaya', function(e) {
         e.preventDefault();
         biaya();
+    });
+
+    // data pengeluaran
+    const lists = (data, total, tahun, bulan) => {
+        let tahuns = <?= json_encode(tahuns('pengeluaran')); ?>;
+        let bulans = <?= json_encode(bulans()); ?>;
+        let html = '';
+        html += `
+            <div class="form-floating mb-2">
+                <select class="form-select bg-dark text-light tahun">`;
+        tahuns.forEach(e => {
+            html += `<option ${(e.tahun==tahun?"selected":"")} value="${e.tahun}">${e.tahun}</option>`;
+        })
+
+        html += `</select>
+                <label>Tahun</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <select class="form-select bg-dark text-light bulan">`;
+        bulans.forEach(e => {
+            html += `<option ${(e.satuan==bulan?"selected":"")} value="${e.satuan}">${e.bulan}</option>`;
+        })
+
+        html += `</select>
+                <label>Bulan</label>
+            </div>
+
+            <button class="btn btn-sm btn-secondary mb-2 lists">Show</button>
+            
+                <div class="mt-3">
+                <h4 class="text-center bg-secondary p-2">-[ ${angka(total)} ]-</h4>
+
+                <input class="form-control form-control-sm bg-dark text-light cari mb-2" placeholder="Cari">
+                    <table class="table table-sm table-dark" style="font-size:12px">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Tgl</th>
+                                <th class="text-center">Barang</th>
+                                <th class="text-center">qty</th>
+                                <th class="text-center">Biaya</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tabel_search">`;
+        data.forEach((e, i) => {
+            html += `<tr>
+                                <th scope="row">${(i+1)}</th>
+                                <td>${time_php_to_js(e.tgl)}</td>
+                                <td class="text-start">${e.barang}</td>
+                                <td>${angka(e.qty)}</td>
+                                <td class="text-end">${angka(e.biaya)}</td>
+                            </tr>`;
+        })
+        html += `</tbody>
+                    </table>
+                </div>
+                `;
+
+        return html;
+    }
+
+    let datases = [];
+
+    $(document).on('click', '.lists', function(e) {
+        e.preventDefault();
+        let tahun = ($(".tahun").val() == undefined || $(".tahun").val() == "" ? "<?= date('Y'); ?>" : $(".tahun").val());
+        let bulan = ($(".bulan").val() == undefined || $(".bulan").val() == "" ? "<?= date('n'); ?>" : $(".bulan").val());
+
+        post("pengeluaran/list", {
+            tahun,
+            bulan
+        }).then(res => {
+            loading("close");
+            datases = res.data;
+            if (res.data.length < 1) {
+                message("400", "Data tidak ada");
+                return;
+            }
+            let html = build_html("Pengeluaran", "offcanvas");
+            html += lists(res.data, res.data2, tahun, bulan);
+
+            $(".body_canvas").html(html);
+
+            if ($('.tahun').length > 0) {
+                canvas.show();
+            }
+        })
+
+    });
+
+    $(document).on('keyup', '.cari', function(e) {
+        e.preventDefault();
+        let value = $(this).val().toLowerCase();
+        $('.tabel_search tr').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+
     });
 </script>
 <?= $this->endSection() ?>

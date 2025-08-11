@@ -14,8 +14,26 @@ class Pengeluaran extends BaseController
     }
     public function index(): string
     {
-        $data = db(menu()['tabel'])->orderBy("updated_at", "DESC")->get()->getResultArray();
-        return view(menu()['controller'] . '/' . menu()['controller'] . "_" . 'landing', ['judul' => menu()['menu'], "data" => $data]);
+        $total = db('pengeluaran')
+            ->selectSum('biaya')
+            ->whereNotIn('jenis', ['Modal', 'Inv'])
+            ->where("MONTH(FROM_UNIXTIME(tgl))", date('n'))
+            ->where("YEAR(FROM_UNIXTIME(tgl))", date('Y'))
+            ->orderBy('updated_at', 'DESC')
+            ->get()
+            ->getRowArray();
+
+        // Query data detail
+        $data = db('pengeluaran')
+            ->select('*')
+            ->whereNotIn('jenis', ['Modal', 'Inv'])
+            ->where("MONTH(FROM_UNIXTIME(tgl))", date('n'))
+            ->where("YEAR(FROM_UNIXTIME(tgl))", date('Y'))
+            ->orderBy('updated_at', 'DESC')
+            ->orderBy('tgl', 'DESC')
+            ->get()
+            ->getResultArray();
+        return view(menu()['controller'] . '/' . menu()['controller'] . "_" . 'landing', ['judul' => menu()['menu'], "data" => $data, 'total' => $total['biaya']]);
     }
     public function add()
     {
@@ -134,5 +152,34 @@ class Pengeluaran extends BaseController
         }
 
         return sukses(base_url(menu()['controller']), 'Sukses');
+    }
+
+    public function list()
+    {
+        $tahun = clear($this->request->getVar('tahun'));
+        $bulan = clear($this->request->getVar('bulan'));
+
+        // Query total biaya
+        $total = db('pengeluaran')
+            ->selectSum('biaya')
+            ->whereNotIn('jenis', ["Inv", "modal"])
+            ->where("MONTH(FROM_UNIXTIME(tgl))", $bulan)
+            ->where("YEAR(FROM_UNIXTIME(tgl))", $tahun)
+            ->get()
+            ->getRowArray();
+
+
+        // Query data detail
+        $data = db('pengeluaran')
+            ->select('*')
+            ->whereNotIn('jenis', ["Inv", "modal"])
+            ->where("MONTH(FROM_UNIXTIME(tgl))", $bulan)
+            ->where("YEAR(FROM_UNIXTIME(tgl))", $tahun)
+            ->orderBy('tgl', 'DESC')
+            ->get()
+            ->getResultArray();
+
+
+        sukses_js("Ok", $data, $total['biaya']);
     }
 }
