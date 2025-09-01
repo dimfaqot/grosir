@@ -9,6 +9,6 @@ class Landing extends BaseController
         if (session('id')) {
             sukses(base_url("home"), "You are logged");
         }
-        return view('guest/landing', ['judul' => "Batea"]);
+        return view('guest/landing', ['judul' => profile()['nama']]);
     }
 }

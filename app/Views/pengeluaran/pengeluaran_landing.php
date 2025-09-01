@@ -24,7 +24,7 @@
     <div class="card text-bg-dark mb-3" data-menu="<?= $i['barang']; ?>">
         <div class="card-header"><?= ($k + 1) . ". " . $i['barang']; ?></div>
         <div class="card-body d-flex justify-content-between ps-4">
-            <div class="text-secondary"><small><?= ($i['jenis'] == "Kulakan" ? date("d/m/Y", $i['tgl']) . " [" . angka($i['harga']) . "] [" . angka($i['qty']) . "]" : date("d/m/Y", $i['tgl']) . " [" . angka($i['harga']) . "]"); ?></small></div>
+            <div class="text-secondary"><small><?= date("d/m/Y", $i['tgl']) . " [" . angka($i['harga']) . "] [" . angka($i['qty']) . "]"; ?></small></div>
             <div>
                 <button class="btn btn-sm btn-light me-2 form_input" data-order="Edit" data-id="<?= $i['id']; ?>">Edit</button>
                 <button class="btn btn-sm btn-danger delete" data-id="<?= $i['id']; ?>" data-message="Yakin hapus data ini?" data-tabel="<?= menu()['tabel']; ?>" data-is_reload="reload">Delete</button>
