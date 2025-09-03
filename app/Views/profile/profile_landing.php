@@ -44,6 +44,7 @@
         let data = <?= json_encode(uang_modal()['data']); ?>;
         let html = build_html("DETAIL MODAL", "offcanvas");
         html += `<input class="form-control form-control-sm bg-dark text-light cari mb-2" placeholder="Cari">
+        <div style="max-height:600px;overflow-y:auto">
                     <table class="table table-sm table-dark" style="font-size:12px">
                         <thead>
                             <tr>
@@ -65,7 +66,7 @@
                             </tr>`;
         })
         html += `</tbody>
-                    </table>`;
+                    </table></div>`;
         $(".body_canvas").html(html);
         canvas.show();
     });
