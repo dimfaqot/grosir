@@ -14,6 +14,13 @@ class Hutang extends BaseController
     }
     public function index(): string
     {
+        $data = db('hutang')->where('customer', 'Batea Tahfidz')->orderBy('tgl', 'DESC')->get()->getResultArray();
+
+        $val = [];
+        foreach ($data as $i) {
+            $i['tgl'] = date('d/m/Y', $i['tgl']);
+            $val[] = $i;
+        }
 
         $data = db('hutang')
             ->select('*')

@@ -24,8 +24,9 @@
 
 <script>
     let detail = (data, total_biaya) => {
-        let html = `<div class="bg-secondary fw-bold p-2 mb-2">TOTAL: ${angka(total_biaya)}</div>
-                        <table class="table table-dark table-bordered" style="font-size: 10px;">
+        let html = `<div class="bg-secondary fw-bold p-2 mb-2">TOTAL: ${angka(total_biaya)}</div>`;
+        html += `<div style="max-height:600px;overflow-y:auto">`;
+        html += `<table class="table table-dark table-bordered" style="font-size: 10px;">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -50,7 +51,7 @@
                     </tr>`;
         });
         html += `</tbody>
-                        </table>`;
+                        </table></div>`;
 
         return html;
     }
