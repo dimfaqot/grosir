@@ -167,6 +167,6 @@ class Pengeluaran extends BaseController
         $total = array_sum(array_column($data, 'biaya'));
 
 
-        sukses_js("Ok", $data, $tahun);
+        sukses_js("Ok", $data, $total);
     }
 }
