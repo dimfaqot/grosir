@@ -10,7 +10,7 @@
     </div>
 
     <div class="p-2 flex-fill">
-        <div class="mb-1 text-center">PENELUARAN</div>
+        <div class="mb-1 text-center">PENGELUARAN</div>
         <div class="d-grid">
             <button class="btn btn-light lists"><i class="fa-solid fa-list"></i></button>
         </div>
@@ -266,11 +266,13 @@
                 <h4 class="text-center bg-secondary p-2">-[ ${angka(total)} ]-</h4>
 
                 <input class="form-control form-control-sm bg-dark text-light cari mb-2" placeholder="Cari">
-                    <table class="table table-sm table-dark" style="font-size:12px">
+                 <div style="max-height:400px;overflow-y:auto">   
+                <table class="table table-sm table-dark" style="font-size:12px">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Tgl</th>
+                                <th class="text-center">Jenis</th>
                                 <th class="text-center">Barang</th>
                                 <th class="text-center">qty</th>
                                 <th class="text-center">Biaya</th>
@@ -280,6 +282,7 @@
         data.forEach((e, i) => {
             html += `<tr>
                                 <th scope="row">${(i+1)}</th>
+                                <td class="text-start">${e.jenis}</td>
                                 <td>${time_php_to_js(e.tgl)}</td>
                                 <td class="text-start">${e.barang}</td>
                                 <td>${angka(e.qty)}</td>
@@ -288,7 +291,7 @@
         })
         html += `</tbody>
                     </table>
-                </div>
+                </div>  </div>
                 `;
 
         return html;
