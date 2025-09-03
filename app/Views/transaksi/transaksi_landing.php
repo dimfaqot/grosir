@@ -501,11 +501,13 @@
                 <h4 class="text-center bg-secondary p-2">-[ ${angka(total)} ]-</h4>
 
                 <input class="form-control form-control-sm bg-dark text-light cari mb-2" placeholder="Cari">
+                <div style="max-height:400px;overflow-y:auto">
                     <table class="table table-sm table-dark" style="font-size:12px">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Tgl</th>
+                                <th class="text-center">Unit</th>
                                 <th class="text-center">Barang</th>
                                 <th class="text-center">Qty</th>
                                 <th class="text-center">Biaya</th>
@@ -516,6 +518,7 @@
             html += `<tr>
                                 <th scope="row">${(i+1)}</th>
                                 <td>${time_php_to_js(e.tgl)}</td>
+                                <td class="text-start">${e.customer}</td>
                                 <td class="text-start">${e.barang}</td>
                                 <td>${angka(e.qty)}</td>
                                 <td class="text-end">${angka(e.biaya)}</td>
@@ -523,6 +526,7 @@
         })
         html += `</tbody>
                     </table>
+                    </div>
                 </div>
                 `;
 
